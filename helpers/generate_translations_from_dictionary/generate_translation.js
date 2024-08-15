@@ -2,23 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import axios from "axios";
 import translate from "@iamtraction/google-translate";
-// import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// async function generateTranslateViaGenerativeAI(enJson, targetLanguage) {
-//   console.log(
-//     "Using gemini-1.5-flash model. API key:",
-//     process.env.GEMINI_API_KEY,
-//   );
-//   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-//   const model = genAI.getGenerativeModel({
-//     model: "gemini-1.5-flash",
-//     generationConfig: { responseMimeType: "application/json" },
-//   });
-//   const prompt = `Translate the following JSON values to ${targetLanguage}. Keep the keys in English. Return only the translated JSON:\n\n${enJson}`;
-//   let result = await model.generateContent(prompt);
-//   console.log(result.response.text());
-//   return result.response.text();
-// }
+import { GenerateTranslationMigration } from "../migration_generation.js";
+import { GenerateTranslationFile } from "../create_translation_file.js";
 
 async function retry(fn, retries = 10, delay = 5000) {
   for (let i = 0; i < retries; i++) {
@@ -84,13 +69,24 @@ async function translateObject(obj, lang, source) {
 }
 
 export async function GenerateTranslation(langs, source) {
+  await GenerateTranslationMigration();
+
+  if (langs.includes("en")) {
+    langs = langs.filter((lang) => lang !== "en");
+  }
+
+  // Check if the "en.json" file exists
+  if (!fs.existsSync(path.join(process.cwd(), "i18n", "en.json"))) {
+    throw new Error("No 'en.json' file found in 'translation' directory");
+  }
+
   // Read the "en.json" file
-  const enFilePath = path.join(process.cwd(), "translation", "en.json");
+  const enFilePath = path.join(process.cwd(), "i18n", "en.json");
   const enContent = fs.readFileSync(enFilePath, "utf8");
   const enJson = JSON.parse(enContent);
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), "translation");
+  const translationDir = path.join(process.cwd(), "i18n");
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }
@@ -99,7 +95,6 @@ export async function GenerateTranslation(langs, source) {
   for (const lang of langs) {
     if (source === "gemini") {
       console.log("Still in progress...");
-      // translation = await generateTranslateViaGenerativeAI(enJson, lang);
     } else {
       translation = await translateObject(enJson, lang, source);
     }
@@ -110,4 +105,6 @@ export async function GenerateTranslation(langs, source) {
       JSON.stringify(translation, null, 2),
     );
   }
+
+  GenerateTranslationFile(langs);
 }

@@ -12,7 +12,8 @@ export async function GenerateTranslationMigration() {
       }
       const translationFiles = fs
         .readdirSync(translationDir)
-        .filter((file) => file.endsWith(".json"));
+        .filter((file) => file.endsWith(".json"))
+        .filter((file) => file !== "en.json");
 
       if (translationFiles.length === 0) {
         return;

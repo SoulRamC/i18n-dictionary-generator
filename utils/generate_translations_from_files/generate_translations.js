@@ -1,18 +1,18 @@
-import * as fs from "fs";
-import * as path from "path";
-import { GenerateTranslationMigration } from "../migration_generation.js";
-import translate from "@iamtraction/google-translate";
+// @ts-nocheck
+import * as fs from 'fs';
+import * as path from 'path';
+import { GenerateTranslationMigration } from '../migration_generation.js';
+import translate from '@iamtraction/google-translate';
 
 export async function GenerateTranslation(langs) {
   await GenerateTranslationMigration();
 
   const files = fs
     .readdirSync(path.join(process.cwd()), { recursive: true })
-    .filter((file) => file.endsWith(".tsx"));
-  console.log(process.cwd());
+    .filter((file) => file.endsWith('.tsx'));
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), "translation");
+  const translationDir = path.join(process.cwd(), 'translation');
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }
@@ -22,9 +22,9 @@ export async function GenerateTranslation(langs) {
 
     // Loop through all files with the ".tsx" extension
     for (const file of files) {
-      if (file.endsWith(".tsx")) {
-        const filePath = path.join(".", file);
-        const content = fs.readFileSync(filePath, "utf8");
+      if (file.endsWith('.tsx')) {
+        const filePath = path.join('.', file);
+        const content = fs.readFileSync(filePath, 'utf8');
 
         // Find all the strings inside the t("") calls
         const regex = /t\("(.*)"\)/g;
@@ -32,12 +32,12 @@ export async function GenerateTranslation(langs) {
 
         // Create the translation object
         for (const match of matches) {
-          const keys = match[1].split(".");
+          const keys = match[1].split('.');
           let currentObj = translation;
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (i === keys.length - 1) {
-              await translate(key, { from: "en", to: lang })
+              await translate(key, { from: 'en', to: lang })
                 .then((res) => {
                   currentObj[key] = res.text;
                   console.log(`Translated ${key} to ${lang}`);
@@ -59,7 +59,7 @@ export async function GenerateTranslation(langs) {
     // Write the translation object to a JSON file
     fs.writeFileSync(
       path.join(translationDir, `${lang}.json`),
-      JSON.stringify(translation, null, 2),
+      JSON.stringify(translation, null, 2)
     );
   }
 }

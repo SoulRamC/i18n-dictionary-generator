@@ -1,9 +1,11 @@
-import * as fs from "fs";
-import * as path from "path";
-import axios from "axios";
-import translate from "@iamtraction/google-translate";
-import { GenerateTranslationMigration } from "../migration_generation.js";
-import { GenerateTranslationFile } from "../create_translation_file.js";
+// @ts-nocheck
+import * as fs from 'fs';
+import * as path from 'path';
+import axios from 'axios';
+import translate from '@iamtraction/google-translate';
+import translatev2 from 'translate-google';
+import { GenerateTranslationMigration } from '../migration_generation.js';
+import { GenerateTranslationFile } from '../create_translation_file.js';
 
 async function retry(fn, retries = 10, delay = 5000) {
   for (let i = 0; i < retries; i++) {
@@ -19,21 +21,22 @@ async function retry(fn, retries = 10, delay = 5000) {
 
 async function GetTranslation(text, source, target) {
   let response;
-  if (source === "google") {
-    response = await retry(() =>
-      translate(text, { from: "en", to: target }).then((res) => res.text),
+  if (source === 'google') {
+    response = await retry(
+      () => translate(text, { from: 'en', to: target }).then((res) => res.text)
+      // translatev2(text, { from: 'en', to: target }).then((res) => res)
     );
   }
 
-  if (source === "libretranslate") {
+  if (source === 'libretranslate') {
     response = await retry(() =>
       axios
-        .post("http://localhost:5000/translate", {
+        .post('http://localhost:5000/translate', {
           q: text,
-          source: "en",
+          source: 'en',
           target: target,
         })
-        .then((res) => res.data.translatedText),
+        .then((res) => res.data.translatedText)
     );
   }
 
@@ -45,7 +48,7 @@ async function translateObject(obj, lang, source) {
   const translatedObj = {};
 
   const translateEntry = async ([key, value]) => {
-    if (typeof value === "object") {
+    if (typeof value === 'object') {
       // Recursively translate nested objects
       translatedObj[key] = await translateObject(value, lang, source);
     } else {
@@ -71,30 +74,30 @@ async function translateObject(obj, lang, source) {
 export async function GenerateTranslation(langs, source) {
   await GenerateTranslationMigration();
 
-  if (langs.includes("en")) {
-    langs = langs.filter((lang) => lang !== "en");
+  if (langs.includes('en')) {
+    langs = langs.filter((lang) => lang !== 'en');
   }
 
   // Check if the "en.json" file exists
-  if (!fs.existsSync(path.join(process.cwd(), "i18n", "en.json"))) {
+  if (!fs.existsSync(path.join(process.cwd(), 'i18n', 'en.json'))) {
     throw new Error("No 'en.json' file found in 'translation' directory");
   }
 
   // Read the "en.json" file
-  const enFilePath = path.join(process.cwd(), "i18n", "en.json");
-  const enContent = fs.readFileSync(enFilePath, "utf8");
+  const enFilePath = path.join(process.cwd(), 'i18n', 'en.json');
+  const enContent = fs.readFileSync(enFilePath, 'utf8');
   const enJson = JSON.parse(enContent);
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), "i18n");
+  const translationDir = path.join(process.cwd(), 'i18n');
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }
 
   let translation = {};
   for (const lang of langs) {
-    if (source === "gemini") {
-      console.log("Still in progress...");
+    if (source === 'gemini') {
+      console.log('Still in progress...');
     } else {
       translation = await translateObject(enJson, lang, source);
     }
@@ -102,7 +105,7 @@ export async function GenerateTranslation(langs, source) {
     // Write the translation object to a JSON file
     fs.writeFileSync(
       path.join(translationDir, `${lang}.json`),
-      JSON.stringify(translation, null, 2),
+      JSON.stringify(translation, null, 2)
     );
   }
 

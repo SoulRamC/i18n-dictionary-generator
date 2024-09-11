@@ -1,16 +1,16 @@
-import * as fs from "fs";
-import * as path from "path";
-import { GenerateTranslationMigration } from "../migration_generation.js";
+import * as fs from 'fs';
+import * as path from 'path';
+import { GenerateTranslationMigration } from '../migration_generation.js';
 
 export async function GenerateDefaultTranslationDictionary() {
   await GenerateTranslationMigration();
 
   const files = fs
     .readdirSync(path.join(process.cwd()), { recursive: true })
-    .filter((file) => file.endsWith(".tsx"));
+    .filter((file) => file.endsWith('.tsx'));
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), "translation");
+  const translationDir = path.join(process.cwd(), 'i18n');
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }
@@ -19,9 +19,9 @@ export async function GenerateDefaultTranslationDictionary() {
 
   // Loop through all files with the ".tsx" extension
   for (const file of files) {
-    if (file.endsWith(".tsx")) {
-      const filePath = path.join(".", file);
-      const content = fs.readFileSync(filePath, "utf8");
+    if (file.endsWith('.tsx')) {
+      const filePath = path.join('.', file);
+      const content = fs.readFileSync(filePath, 'utf8');
 
       // Find all the strings inside the t("") calls
       const regex = /\bt\(["'](.*?)["']\)/g;
@@ -29,12 +29,12 @@ export async function GenerateDefaultTranslationDictionary() {
 
       // Create the translation object
       for (const match of matches) {
-        const keys = match[1].split(".");
+        const keys = match[1].split('.');
         let currentObj = translation;
         for (let i = 0; i < keys.length; i++) {
           const key = keys[i];
           if (i === keys.length - 1) {
-            currentObj[key] = "";
+            currentObj[key] = '';
           } else {
             if (!currentObj[key]) {
               currentObj[key] = {};
@@ -49,6 +49,6 @@ export async function GenerateDefaultTranslationDictionary() {
   // Write the translation object to a JSON file
   fs.writeFileSync(
     path.join(translationDir, `en.json`),
-    JSON.stringify(translation, null, 2),
+    JSON.stringify(translation, null, 2)
   );
 }

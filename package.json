@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "type": "module",
@@ -19,12 +21,23 @@
     "@iamtraction/google-translate": "^2.0.1",
     "axios": "^1.7.3",
     "commander": "^12.1.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "i18next": "^23.15.1",
+    "react-i18next": "^15.0.1",
+    "translate-google": "^1.5.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@eslint/js": "^9.8.0",
-    "eslint": "9.x",
+    "@types/node": "^22.5.4",
+    "eslint": "~9.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.9.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "npm": "^10.8.3",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2"
   }
 }

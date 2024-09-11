@@ -1,25 +1,25 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
 export async function GenerateTranslationMigration() {
   // Read if the translation files exist already
   const promise = new Promise((resolve, reject) => {
     try {
       const date = new Date().toISOString();
-      const translationDir = path.join(process.cwd(), "translation");
+      const translationDir = path.join(process.cwd(), 'translation');
       if (!fs.existsSync(translationDir)) {
         return;
       }
       const translationFiles = fs
         .readdirSync(translationDir)
-        .filter((file) => file.endsWith(".json"))
-        .filter((file) => file !== "en.json");
+        .filter((file) => file.endsWith('.json'))
+        .filter((file) => file !== 'en.json');
 
       if (translationFiles.length === 0) {
         return;
       }
 
-      const migrationDir = path.join(process.cwd(), "translation", "migration");
+      const migrationDir = path.join(process.cwd(), 'translation', 'migration');
       if (!fs.existsSync(migrationDir)) {
         fs.mkdirSync(migrationDir);
       }

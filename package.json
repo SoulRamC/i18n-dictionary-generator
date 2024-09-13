@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.{js,ts}\"",
     "format": "prettier --write ."
   },
   "keywords": [],

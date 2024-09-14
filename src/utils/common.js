@@ -34,3 +34,7 @@ export function readTranslationFile() {
 
   return enJson;
 }
+
+export function updateMigrationHistory(newHistory) {
+  fs.writeFileSync(historyFilePath, JSON.stringify(newHistory, null, 2));
+}

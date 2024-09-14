@@ -5,44 +5,68 @@ import {
   getMigrationFiles,
   readMigrationFile,
   CreateTranslationFile,
+  readMigrationHistory,
+  updateMigrationHistory,
 } from '../utils/index.js';
 import { translateObject } from '../translation/index.js';
 
-function mergeTranslationObj() {
-  const migrationFiles = getMigrationFiles();
-  // Combine all existing migrations
-  let allMigrations = {};
-  for (const file of migrationFiles) {
-    const migration = readMigrationFile(file);
-    allMigrations = { ...allMigrations, ...migration };
+function mergeUnappliedMigrations(unAppliedMigrations) {
+  let mergedMigration = {};
+  for (const file of unAppliedMigrations) {
+    const migration = readMigrationFile(file.migration);
+    mergedMigration = { ...mergedMigration, ...migration };
   }
 
-  return allMigrations;
+  return mergedMigration;
 }
 
-function getPendingMigrations() {}
+function getUnappliedMigration() {
+  const migrationHistory = readMigrationHistory();
+  const unAppliedMigrations = migrationHistory
+    .filter((migration) => !migration.applied)
+    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+  return unAppliedMigrations;
+}
 
 export async function RunMigrations(langs, source) {
   const translationDir = path.join(process.cwd(), 'i18n');
   if (langs.includes('en')) {
     langs = langs.filter((lang) => lang !== 'en');
   }
-  const allMigrationsData = mergeTranslationObj();
+  const unAppliedMigrations = getUnappliedMigration();
+  if (unAppliedMigrations.length === 0) {
+    console.log('No unapplied migrations found.');
+    return;
+  }
+
+  const mergedMigration = mergeUnappliedMigrations(unAppliedMigrations);
 
   let translation = {};
   for (const lang of langs) {
     if (source === 'gemini') {
       console.log('Still in progress...');
     } else {
-      translation = await translateObject(allMigrationsData, lang, source);
+      translation = await translateObject(mergedMigration, lang, source);
     }
 
-    // Write the translation object to a JSON file
-    fs.writeFileSync(
-      path.join(translationDir, `${lang}.json`),
-      JSON.stringify(translation, null, 2)
-    );
+    const translationFilePath = path.join(translationDir, `${lang}.json`);
+    // If the translation file already exists, merge new translations into it
+    if (fs.existsSync(translationFilePath)) {
+      const existingTranslations = JSON.parse(
+        fs.readFileSync(translationFilePath, 'utf-8')
+      );
+      translation = { ...existingTranslations, ...translation };
+    }
+
+    // Write the translation object to the JSON file
+    fs.writeFileSync(translationFilePath, JSON.stringify(translation, null, 2));
   }
+  for (const migration of unAppliedMigrations) {
+    migration.applied = true;
+  }
+
+  updateMigrationHistory(unAppliedMigrations);
 
   CreateTranslationFile(langs);
 }

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-export function GenerateTranslationFile(langs) {
+export function CreateTranslationFile(langs) {
   // if no en found, added it
   if (!langs.includes('en')) {
     langs.push('en');

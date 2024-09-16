@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "type": "module",
-  "author": "",
+  "author": "SoulRamC",
   "license": "ISC",
   "dependencies": {
     "@google/generative-ai": "^0.17.0",

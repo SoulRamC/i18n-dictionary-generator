@@ -1,11 +1,8 @@
 // @ts-nocheck
 import * as fs from 'fs';
 import * as path from 'path';
-import { GenerateTranslationMigration } from '../migration_generation.js';
 
 export async function GenerateDefaultTranslationDictionary() {
-  await GenerateTranslationMigration();
-
   const files = fs
     .readdirSync(path.join(process.cwd()), { recursive: true })
     .filter((file) => file.endsWith('.tsx'));

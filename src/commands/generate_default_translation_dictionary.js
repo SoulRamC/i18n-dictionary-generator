@@ -1,4 +1,4 @@
-import { GenerateDefaultTranslationDictionary } from 'src/utils/create_default_dictionary.js';
+import { GenerateDefaultTranslationDictionary } from '../utils/create_default_dictionary.js';
 
 export default (program) => {
   program

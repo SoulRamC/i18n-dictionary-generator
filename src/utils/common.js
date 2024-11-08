@@ -36,12 +36,21 @@ export function readTranslationFile() {
 }
 
 export function updateMigrationHistory(newHistory) {
-  // Read the current history from the file
   const currentHistory = readMigrationHistory();
 
-  // Append the new history to the existing one
-  const updatedHistory = [...currentHistory, ...newHistory];
-
   // Write the updated history back to the file
-  fs.writeFileSync(historyFilePath, JSON.stringify(updatedHistory, null, 2));
+  if (currentHistory.length === 1) {
+    fs.writeFileSync(historyFilePath, JSON.stringify(newHistory, null, 2));
+  } else {
+    currentHistory.forEach((oldEntry) => {
+      const match = newHistory.find(
+        (currentEntry) => currentEntry.migration === oldEntry.migration
+      );
+      if (match) {
+        oldEntry.applied = true;
+      }
+    });
+
+    fs.writeFileSync(historyFilePath, JSON.stringify(currentHistory, null, 2));
+  }
 }

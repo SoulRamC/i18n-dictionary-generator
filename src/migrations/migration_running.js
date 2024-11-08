@@ -23,7 +23,10 @@ function getUnappliedMigration() {
   const migrationHistory = readMigrationHistory();
   const unAppliedMigrations = migrationHistory
     .filter((migration) => !migration.applied)
-    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    .sort(
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 
   return unAppliedMigrations;
 }

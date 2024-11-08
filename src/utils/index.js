@@ -4,6 +4,7 @@ import {
   readMigrationHistory,
   readTranslationFile,
   updateMigrationHistory,
+  separateNullValues,
 } from './common.js';
 import { RetryRequest } from './retry_request.js';
 import { CreateTranslationFile } from './create_translation_file.js';
@@ -18,4 +19,5 @@ export {
   readTranslationFile,
   readMigrationHistory,
   updateMigrationHistory,
+  separateNullValues,
 };

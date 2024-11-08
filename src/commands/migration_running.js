@@ -19,6 +19,9 @@ export default (program) => {
       if (!['google', 'libretranslate', 'gemini'].includes(source)) {
         throw new Error('Invalid source');
       }
+
+      if (source === 'gemini') throw new Error('Gemini still in progress');
+
       await RunMigrations(langs, source);
       console.log('Translation files generated successfully');
     });

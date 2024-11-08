@@ -35,6 +35,23 @@ export function readTranslationFile() {
   return enJson;
 }
 
+export function separateNullValues(obj, nullValues = {}) {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] === null) {
+      nullValues[key] = null;
+      delete obj[key];
+    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+      // If it's an object, go deeper
+      nullValues[key] = separateNullValues(obj[key], {});
+
+      // Remove the key if it's now empty after removing nulls
+      if (Object.keys(nullValues[key]).length === 0) delete nullValues[key];
+      if (Object.keys(obj[key]).length === 0) delete obj[key];
+    }
+  });
+  return nullValues;
+}
+
 export function updateMigrationHistory(newHistory) {
   const currentHistory = readMigrationHistory();
 

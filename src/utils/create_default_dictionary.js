@@ -13,6 +13,10 @@ export async function GenerateDefaultTranslationDictionary() {
     fs.mkdirSync(translationDir);
   }
 
+  if (fs.existsSync(path.join(translationDir, 'en.json'))) {
+    throw new Error('en.json already exists');
+  }
+
   const translation = {};
 
   // Loop through all files with the ".tsx" extension

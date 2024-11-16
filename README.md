@@ -7,20 +7,18 @@ I18N Dictionary Generator is a tool designed to simplify and accelerate the proc
 Adding translations partway through development can be a tedious and error-prone task. I built I18N Dictionary Generator after experiencing firsthand the challenges of retrofitting translation functionality into a project that was already underway. This tool was born out of the need for a faster, more efficient way to handle internationalization (i18n).
 Features
 
-    Automatic Key Generation: Extracts text from your project and generates structured translation keys.
-    Multi-Language Support: Easily manage translations for multiple languages in a single, organized workflow.
-    Customizable Output: Generate translation files in JSON, YAML, or other formats your project uses.
-    Conflict Detection: Identifies duplicate or missing keys to ensure translation consistency.
-    Incremental Updates: Quickly integrate new translations without redoing existing work.
+- Automatic Key Generation: Extracts text from your project and generates structured translation keys.
+- Multi-Language Support: Easily manage translations for multiple languages in a single, organized workflow.
+- Customizable Output: Generate translation files in JSON, YAML, or other formats your project uses.
+- Conflict Detection: Identifies duplicate or missing keys to ensure translation consistency.
+- Incremental Updates: Quickly integrate new translations without redoing existing work.
 
-Benefits
+### Benefits:
 
-    Saves Time: Automates repetitive tasks and reduces manual effort.
-    Improves Accuracy: Minimizes the risk of human errors when creating and managing translation dictionaries.
-    Scales Easily: Works seamlessly with projects of any size, from small apps to large-scale platforms.
-    Compatible with Your Workflow: Designed to integrate into your existing development environment and tools.
-
-## Getting Started
+- Saves Time: Automates repetitive tasks and reduces manual effort.
+- Improves Accuracy: Minimizes the risk of human errors when creating and managing translation dictionaries.
+- Scales Easily: Works seamlessly with projects of any size, from small apps to large-scale platforms.
+- Compatible with Your Workflow: Designed to integrate into your existing development environment and tools.
 
 ### Installation
 
@@ -39,37 +37,32 @@ npm install
 npm start
 ```
 
-### Usage:
+## Usage/Examples
 
-    1. Initialize the Generator: Run the following command to scan your project for translatable text:
+- Initialize the Generator: Run the following command to scan your project for translatable text:
 
-```shell
-i18n-dict-gen init
-```
+  ```shell
+  i18n-dict-gen init
+  ```
 
-    2. Generate Translation Files: After initialization, generate translation dictionaries with:
+- Generate Translation Files: After initialization, generate translation dictionaries with:
+  ```console
+  i18n-dict-gen generate
+  ```
+- Add or Update Translations: Add new translations or update existing ones directly in the generated files.
 
-```bash
-    i18n-dict-gen generate
-```
+## License
 
-    Add or Update Translations: Add new translations or update existing ones directly in the generated files.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-### Configuration:
+[MIT](https://choosealicense.com/licenses/mit/)
 
-The tool uses a i18n-config.json file for custom settings, such as:
-
-    Source directories
-    File extensions to scan
-    Output file structure and format
-
-### Contributing:
+## Contributing:
 
 Contributions are welcome! Feel free to fork the repository and submit a pull request with your improvements. Please make sure your changes pass all tests and adhere to the project's coding guidelines.
 License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
-Feedback
+## Feedback
 
 Have questions, suggestions, or feedback? Reach out or create an issue on the GitHub repository. Your input is invaluable in making this tool better for everyone!
 

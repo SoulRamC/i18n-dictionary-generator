@@ -5,27 +5,35 @@ I18N Dictionary Generator is a tool designed to simplify and accelerate the proc
 ## Why I Created This Tool
 
 Adding translations partway through development can be a tedious and error-prone task. I built I18N Dictionary Generator after experiencing firsthand the challenges of retrofitting translation functionality into a project that was already underway. This tool was born out of the need for a faster, more efficient way to handle internationalization (i18n).
-Features
 
-- Automatic Key Generation: Extracts text from your project and generates structured translation keys.
-- Multi-Language Support: Easily manage translations for multiple languages in a single, organized workflow.
-- Customizable Output: Generate translation files in JSON, YAML, or other formats your project uses.
-- Conflict Detection: Identifies duplicate or missing keys to ensure translation consistency.
-- Incremental Updates: Quickly integrate new translations without redoing existing work.
+## Features
 
-### Benefits:
+### Benefits
 
-- Saves Time: Automates repetitive tasks and reduces manual effort.
-- Improves Accuracy: Minimizes the risk of human errors when creating and managing translation dictionaries.
-- Scales Easily: Works seamlessly with projects of any size, from small apps to large-scale platforms.
-- Compatible with Your Workflow: Designed to integrate into your existing development environment and tools.
+- **Saves Time**: Automates repetitive tasks and reduces manual effort.
+- **Improves Accuracy**: Minimizes the risk of human errors when creating and managing translation dictionaries.
+- **Scales Easily**: Works seamlessly with projects of any size, from small apps to large-scale platforms.
+- **Compatible with Your Workflow**: Designed to integrate into your existing development environment and tools.
 
-### Installation
+### Supported Capabilities
+
+- Automatic project scanning for translatable text
+- Multi-language translation generation
+- Easy translation file management
+- Configurable translation sources
+- Integration with google transalte and LibreTranslate for automated translations
+
+## Prerequisites
+
+- Node.js (version 14.0.0 or higher)
+- npm (version 6.0.0 or higher)
+
+## Installation
 
 You can install the tool via npm:
 
 ```shell
-npm install -g i18n-dictionary-generator
+npm install i18n-dictionary-generator
 ```
 
 Or clone the repository and run it locally:
@@ -37,33 +45,59 @@ npm install
 npm start
 ```
 
+## Configuration
+
+Create a `.env` file in your project root with the following optional configuration:
+
+```
+TRANSLATION_DIR_NAME="i18n"
+LIBRETRANSLATE_URL="http://localhost:5000/translate"
+```
+
+### Default Values
+
+- `TRANSLATION_DIR_NAME`: "i18n"
+- `LIBRETRANSLATE_URL`: "http://localhost:5000/translate"
+
 ## Usage/Examples
 
-- Initialize the Generator: Run the following command to scan your project for translatable text:
+### Initialize the Generator
 
-  ```shell
-  i18n-dict-gen init
-  ```
+Scan your project for translatable text:
 
-- Generate Translation Files: After initialization, generate translation dictionaries with:
-  ```console
-  i18n-dict-gen generate
-  ```
-- Add or Update Translations: Add new translations or update existing ones directly in the generated files.
+```shell
+i18ndg init
+```
+
+### Generate Translation Files
+
+Create translation dictionaries:
+
+```shell
+i18ndg generate <source> [langs...]
+```
+
+### Add or Update Translations
+
+Add new translations or update existing ones directly in the generated files.
+
+## Available Commands
+
+- `init`: Scan project and generate default translation dictionary (en.json)
+- `generate <source> [langs...]`: Generate translations using an English dictionary
+- `show`: Display migrations
+- `help [command]`: Display help for a specific command
+
+## Contributing
+
+Contributions are welcome!
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+See the [LICENSE](https://choosealicense.com/licenses/mit/) file for details.
 
-## Contributing:
+## Support
 
-Contributions are welcome! Feel free to fork the repository and submit a pull request with your improvements. Please make sure your changes pass all tests and adhere to the project's coding guidelines.
-License
-
-## Feedback
-
-Have questions, suggestions, or feedback? Reach out or create an issue on the GitHub repository. Your input is invaluable in making this tool better for everyone!
-
-With I18N Dictionary Generator, adding translations to your project is no longer a pain—it's a breeze.
+If you encounter any issues or have questions, please file an issue on the GitHub repository.

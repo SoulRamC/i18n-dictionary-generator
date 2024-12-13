@@ -1,6 +1,5 @@
-import { RetryRequest } from "../utils/retry_request.js";
-import translate from 'translate-google'
-
+import { RetryRequest } from '../utils/retry_request.js';
+import translate from 'translate-google';
 
 async function GetTranslation(text, source, target) {
   let response;
@@ -12,20 +11,17 @@ async function GetTranslation(text, source, target) {
 
   if (source === 'libretranslate') {
     response = await RetryRequest(() =>
-      fetch(
-        process.env.LIBRETRANSLATE_URL || 'http://localhost:5000/translate',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            q: text,
-            source: 'en',
-            target: target,
-          }),
-        }
-      )
+      fetch(process.env.LIBRETRANSLATE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: text,
+          source: 'en',
+          target: target,
+        }),
+      })
         .then((res) => res.json())
         .then((data) => data.translatedText)
     );
@@ -33,7 +29,6 @@ async function GetTranslation(text, source, target) {
 
   return response;
 }
-
 
 export async function translateObject(obj, lang, source) {
   const translatedObj = {};

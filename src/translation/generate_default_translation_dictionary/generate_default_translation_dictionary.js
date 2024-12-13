@@ -11,7 +11,10 @@ export async function GenerateDefaultTranslationDictionary() {
     .filter((file) => file.endsWith('.tsx'));
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), 'i18n');
+  const translationDir = path.join(
+    process.cwd(),
+    process.env.TRANSLATION_DIR_NAME
+  );
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }

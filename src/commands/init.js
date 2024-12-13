@@ -7,11 +7,13 @@ import { GenerateDefaultTranslationDictionary } from '../utils/create_default_di
  * @returns {void}
  */
 export default (program) => {
+  console.log('transalton dir', process.env.TRANSLATION_DIR_NAME);
   program
-    .command('generate')
-    .description('Generate default translation dictionary named en.json')
+    .command('init')
+    .description(
+      'Scan project and generated default translation dictionary named en.json'
+    )
     .action(async () => {
       await GenerateDefaultTranslationDictionary();
-      console.log('Generated default translation dictionary');
     });
 };

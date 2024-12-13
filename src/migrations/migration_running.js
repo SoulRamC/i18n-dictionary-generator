@@ -88,4 +88,5 @@ export async function RunMigrations(langs, source) {
 
   // Optional: Create the translation file if needed
   CreateTranslationFile(langs);
+  console.log('Translation files generated successfully');
 }

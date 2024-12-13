@@ -20,12 +20,29 @@ async function promptUser() {
 }
 
 export async function GenerateDefaultTranslationDictionary() {
-  const files = fs
-    .readdirSync(path.join(process.cwd()), { recursive: true })
-    .filter((file) => file.endsWith('.tsx'));
+  // Collect all .tsx files recursively
+  function getAllTsxFiles(dir) {
+    let results = [];
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+      const fullPath = path.join(dir, file);
+      const stats = fs.statSync(fullPath);
+      if (stats.isDirectory()) {
+        results = results.concat(getAllTsxFiles(fullPath));
+      } else if (file.endsWith('.tsx')) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  const tsxFiles = getAllTsxFiles(process.cwd());
 
   // Create the "translation" directory if it doesn't exist
-  const translationDir = path.join(process.cwd(), 'i18n');
+  const translationDir = path.join(
+    process.cwd(),
+    process.env.TRANSLATION_DIR_NAME
+  );
   if (!fs.existsSync(translationDir)) {
     fs.mkdirSync(translationDir);
   }
@@ -44,9 +61,8 @@ export async function GenerateDefaultTranslationDictionary() {
 
   const translation = {};
 
-  // Loop through all files with the ".tsx" extension
-  for (const file of files) {
-    const filePath = path.join('.', file);
+  // Loop through all collected .tsx files
+  for (const filePath of tsxFiles) {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Find all the strings inside the t("") calls
@@ -60,7 +76,7 @@ export async function GenerateDefaultTranslationDictionary() {
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         if (i === keys.length - 1) {
-          currentObj[key] = '';
+          currentObj[key] = formatKey(key);
         } else {
           if (!currentObj[key]) {
             currentObj[key] = {};
@@ -76,4 +92,12 @@ export async function GenerateDefaultTranslationDictionary() {
   console.log(
     `en.json has been successfully generated/updated at ${enJsonPath}`
   );
+}
+
+// Helper function to format keys
+function formatKey(key) {
+  return key
+    .replace(/[_-]/g, ' ') // Replace _ and - with spaces
+    .toLowerCase() // Convert the key to lowercase
+    .replace(/^\w/, (c) => c.toUpperCase()); // Capitalize the first letter
 }

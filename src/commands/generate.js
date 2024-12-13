@@ -1,8 +1,11 @@
-import { GenerateTranslation } from '../utils/generate_translations_from_dictionary/generate_translation.js';
+import {
+  GenerateTranslationMigration,
+  RunMigrations,
+} from '../migrations/index.js';
 
 export default (program) => {
   program
-    .command('gtfd')
+    .command('generate')
     .description('Generate translation using an english dictionary (en.json)')
     .argument(
       'source',
@@ -19,7 +22,10 @@ export default (program) => {
       if (!['google', 'libretranslate', 'gemini'].includes(source)) {
         throw new Error('Invalid source');
       }
-      await GenerateTranslation(langs, source);
-      console.log('Translation files generated successfully');
+
+      if (source === 'gemini') throw new Error('Gemini still in progress');
+
+      await GenerateTranslationMigration();
+      await RunMigrations(langs, source);
     });
 };

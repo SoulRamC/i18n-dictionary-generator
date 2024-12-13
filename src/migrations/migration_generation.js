@@ -6,44 +6,47 @@ import {
   CheckDirectories,
 } from '../utils/index.js';
 
-export async function GenerateTranslationMigration() {
-  try {
-    const translationObj = readTranslationFile();
+export function GenerateTranslationMigration() {
+  return new Promise((resolve, reject) => {
+    try {
+      const translationObj = readTranslationFile();
 
-    const { migrationDir, historyFilePath } = CheckDirectories();
+      const { migrationDir, historyFilePath } = CheckDirectories();
 
-    const existingMigrations = getMigrationFiles();
-    const changes = compareWithAllMigrations(
-      translationObj,
-      existingMigrations,
-      migrationDir
-    );
-    if (Object.keys(changes).length > 0) {
-      const timestamp = new Date()
-        .toISOString()
-        .replace(/[-:]/g, '')
-        .split('.')[0];
-      const migrationFileName = `${timestamp}_migration.json`;
-      const migrationFilePath = path.join(migrationDir, migrationFileName);
-      fs.writeFileSync(migrationFilePath, JSON.stringify(changes, null, 2));
+      const existingMigrations = getMigrationFiles();
+      const changes = compareWithAllMigrations(
+        translationObj,
+        existingMigrations,
+        migrationDir
+      );
+      if (Object.keys(changes).length > 0) {
+        const timestamp = new Date()
+          .toISOString()
+          .replace(/[-:]/g, '')
+          .split('.')[0];
+        const migrationFileName = `${timestamp}_migration.json`;
+        const migrationFilePath = path.join(migrationDir, migrationFileName);
+        fs.writeFileSync(migrationFilePath, JSON.stringify(changes, null, 2));
 
-      console.log(`New migration file created: ${migrationFileName}`);
+        console.log(`New migration file created: ${migrationFileName}`);
 
-      // Update migration history
-      const history = JSON.parse(fs.readFileSync(historyFilePath, 'utf8'));
-      history.push({
-        migration: migrationFileName,
-        applied: false,
-        timestamp,
-      });
-      fs.writeFileSync(historyFilePath, JSON.stringify(history, null, 2));
-    } else {
-      console.log('No changes detected. No new migration file created.');
+        // Update migration history
+        const history = JSON.parse(fs.readFileSync(historyFilePath, 'utf8'));
+        history.push({
+          migration: migrationFileName,
+          applied: false,
+          timestamp,
+        });
+        fs.writeFileSync(historyFilePath, JSON.stringify(history, null, 2));
+      } else {
+        console.log('No changes detected. No new migration file created.');
+      }
+      resolve(changes);
+    } catch (error) {
+      console.error('Error generating migration:', error);
+      reject(error);
     }
-    return changes;
-  } catch (error) {
-    console.error('Error generating migration:', error);
-  }
+  });
 }
 
 function compareWithAllMigrations(newObj, migrationFiles, migrationDir) {

@@ -42,7 +42,11 @@ i18n.use(initReactI18next).init({
 export default i18n;
 `;
 
-  const filePath = path.join(process.cwd(), 'i18n', 'translation.js');
+  const filePath = path.join(
+    process.cwd(),
+    process.env.TRANSLATION_DIR_NAME,
+    'translation.js'
+  );
   fs.writeFileSync(filePath, translationJsContent);
   console.log('translation.js file has been generated successfully.');
 }

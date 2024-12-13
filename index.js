@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import 'dotenv/config';
+import { config } from 'dotenv';
 import migration_display from './src/commands/migration_display.js';
-import migration_running from './src/commands/migration_running.js';
-import migration_generation from './src/commands/migration_generation.js';
-import generate_default_translation_dictionary from './src/commands/generate_default_translation_dictionary.js';
+import init from './src/commands/init.js';
+import generate from './src/commands/generate.js';
+
+config();
+
+process.env.TRANSLATION_DIR_NAME = process.env.TRANSLATION_DIR_NAME || 'i18n';
+process.env.LIBRETRANSLATE_URL =
+  process.env.LIBRETRANSLATE_URL || 'http://localhost:5000/translate';
 
 const program = new Command();
 
-generate_default_translation_dictionary(program);
+init(program);
+generate(program);
 migration_display(program);
-migration_generation(program);
-migration_running(program);
 
 program.parse(process.argv);

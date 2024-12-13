@@ -2,7 +2,7 @@ import { RunMigrations } from '../migrations/index.js';
 
 export default (program) => {
   program
-    .command('rm')
+    .command('generate')
     .description('Generate translation using an english dictionary (en.json)')
     .argument(
       'source',

@@ -1,18 +1,31 @@
 {
   "name": "i18n-dictionary-generator",
   "version": "1.0.1",
-  "description": "",
+  "description": "A tool to simplify and automate translation dictionary generation.",
   "main": "index.js",
   "bin": {
     "i18ndg": "index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoulRamC/i18n-dictionary-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SoulRamC/i18n-dictionary-generator/issues"
+  },
+  "homepage": "https://github.com/SoulRamC/i18n-dictionary-generator#readme",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.{js,ts}\"",
     "format": "prettier --write ."
   },
-  "keywords": [],
+  "keywords": [
+    "i18n",
+    "translation",
+    "dictionary",
+    "automation"
+  ],
   "type": "module",
   "author": "SoulRamC",
   "license": "MIT",

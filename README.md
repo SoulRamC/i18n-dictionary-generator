@@ -23,6 +23,26 @@ Adding translations partway through development can be a tedious and error-prone
 - Configurable translation sources
 - Integration with google transalte and LibreTranslate for automated translations
 
+### How It Works
+
+**Scan Your Project for Translatable Text**
+
+The library currently scans your project to identify text strings that need translation. At this stage, it **only looks for text wrapped inside the `t('')` format inside TSX files**.
+
+#### Example:
+
+If your project contains code like this:
+
+```javascript
+t('welcome_message');
+t('button.submit');
+```
+
+The library will extract the following keys for translation:
+
+- welcome_message
+- button.submit
+
 ## Prerequisites
 
 - Node.js (version 14.0.0 or higher)
@@ -63,7 +83,7 @@ LIBRETRANSLATE_URL="http://localhost:5000/translate"
 
 ### Initialize the Generator
 
-Scan your project for translatable text:
+Scan your project for translatable text, for now, it only scans for text inside a t('') format:
 
 ```shell
 i18ndg init
